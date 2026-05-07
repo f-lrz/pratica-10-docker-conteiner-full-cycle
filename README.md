@@ -1,0 +1,1 @@
+# pratica-10-docker-conteiner-full-cycle
