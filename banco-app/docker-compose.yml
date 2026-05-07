@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:13
+    env_file: .env
+    ports:
+      - "5432:5432"
+    networks:
+      - banco-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+    restart: unless-stopped
+  transaction-service:
+    build: ./api-transacoes
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - banco-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+    restart: always
+  query-service:
+    build: ./servico-query
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - banco-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+    restart: always
+networks:
+  banco-network:
+    driver: bridge
